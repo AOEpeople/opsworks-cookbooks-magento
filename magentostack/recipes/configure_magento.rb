@@ -20,12 +20,12 @@ node[:deploy].each do |application, deploy|
           # Assuming we have a single Redis server
           if node[:opsworks][:layers][:redis][:instances].first
             redis_ip = node[:opsworks][:layers][:redis][:instances].first[1][:private_ip].to_s
-            if deploy[:settings][:redis_cache_port]
+            if deploy.key?(:settings) && deploy[:settings].key?(:redis_cache_port)
               file.write("# Cache Backend,,,\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend_options/server,,#{redis_ip}\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend_options/port,,#{deploy[:settings][:redis_cache_port].to_s}\n")
             end
-            if deploy[:settings][:redis_session_port]
+            if deploy.key?(:settings) && deploy[:settings].key?(:redis_session_port)
               file.write("# Sessions Storage,,,\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/redis_session/host,,#{redis_ip}\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/redis_session/port,,#{deploy[:settings][:redis_session_port]}\n")
@@ -41,7 +41,7 @@ node[:deploy].each do |application, deploy|
     cwd "#{deploy[:deploy_to]}/current/#{deploy[:document_root]}"
     command "../tools/apply.php '#{deploy[:environment]}' '/tmp/settings_#{application}.csv'"
     action :run
-    only_if do File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
+    only_if do deploy.key?(:environment) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
   end
 
 end
