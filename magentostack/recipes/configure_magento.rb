@@ -3,9 +3,9 @@ node[:deploy].each do |application, deploy|
 
   ruby_block "Create dynamic Magento configuration file for #{application}" do
     block do
-      if deploy.key?(:environment) then
+      if deploy.key?(:environment_name) then
         File.open("/tmp/settings_#{application}.csv", 'w') { |file|
-          file.write("Handler,Param2,Param2,Param3,#{deploy[:environment]}\n")
+          file.write("Handler,Param2,Param2,Param3,#{deploy[:environment_name]}\n")
 
           if deploy[:database]
             file.write("# Database,,,\n")
@@ -39,9 +39,9 @@ node[:deploy].each do |application, deploy|
   execute "Apply dynamic Magento environment settings to #{application}" do
     user "deploy"
     cwd "#{deploy[:deploy_to]}/current/#{deploy[:document_root]}"
-    command "../tools/apply.php '#{deploy[:environment]}' '/tmp/settings_#{application}.csv'"
+    command "../tools/apply.php '#{deploy[:environment_name]}' '/tmp/settings_#{application}.csv'"
     action :run
-    only_if do deploy.key?(:environment) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
+    only_if do deploy.key?(:environment_name) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
   end
 
 end
