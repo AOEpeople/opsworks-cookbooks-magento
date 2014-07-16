@@ -15,6 +15,8 @@ node[:deploy].each do |application, deploy|
             file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/resources/default_setup/connection/username,,#{deploy[:database][:username]}\n")
           end
 
+          print "\n\n" + deploy.inspect + "\n\n"
+
           # Assuming we have a single Redis server
           if node[:opsworks][:layers][:redis][:instances].first
             redis_ip = node[:opsworks][:layers][:redis][:instances].first[1][:private_ip].to_s
