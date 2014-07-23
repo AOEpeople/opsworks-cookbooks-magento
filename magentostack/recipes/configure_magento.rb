@@ -22,15 +22,28 @@ node[:deploy].each do |application, deploy|
             redis_ip = node[:opsworks][:layers][:redis][:instances].first[1][:private_ip].to_s
             if deploy.key?(:settings) && deploy[:settings].key?(:redis_cache_port)
               file.write("# Cache Backend,,,\n")
+              file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend,,Cm_Cache_Backend_Redis\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend_options/server,,#{redis_ip}\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend_options/port,,#{deploy[:settings][:redis_cache_port].to_s}\n")
+              file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/cache/backend_options/database,,0\n")
             end
             if deploy.key?(:settings) && deploy[:settings].key?(:redis_session_port)
               file.write("# Sessions Storage,,,\n")
+              file.write("Est_Handler_XmlFile,app/etc/modules/Cm_RedisSession.xml,/config/modules/Cm_RedisSession/active,,true\n")
+              file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/session_save,,db\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/redis_session/host,,#{redis_ip}\n")
               file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/redis_session/port,,#{deploy[:settings][:redis_session_port]}\n")
             end
           end
+
+          # dynamically add more settings
+          if deploy[:env_settings]
+            file.write("# Settings added via chef json,,,\n")
+            deploy[:env_settings].each do |env_setting|
+              file.write("#{env_setting[:handler]},#{env_setting[:param1]},#{env_setting[:param2]},#{env_setting[:param3]},#{env_setting[:value]}\n")
+            end
+          end
+
         }
       end
     end
