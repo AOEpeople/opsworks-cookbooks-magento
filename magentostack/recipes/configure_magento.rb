@@ -66,7 +66,7 @@ node[:deploy].each do |application, deploy|
     action masterinstance ? :create : :delete
     minute '*'
     user node[:apache][:user]
-    command "s! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
+    command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
   end
 
 end
