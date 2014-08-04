@@ -49,12 +49,24 @@ node[:deploy].each do |application, deploy|
     end
   end
 
+  magento_basepath="#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/"
+
   execute "Apply dynamic Magento environment settings to #{application}" do
     user "deploy"
-    cwd "#{deploy[:deploy_to]}/current/#{deploy[:document_root]}"
+    cwd magento_basepath
     command "../tools/apply.php '#{deploy[:environment_name]}' '/tmp/settings_#{application}.csv'"
     action :run
     only_if do deploy.key?(:environment_name) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
+  end
+
+  masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
+  Chef::Log.info("Master instance: #{masterinstance.inspect}")
+
+  cron "Magento cron on master instance for #{application}" do
+    action masterinstance ? :create : :delete
+    minute '*'
+    user node[:apache][:user]
+    command "s! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
   end
 
 end
