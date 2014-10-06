@@ -65,11 +65,11 @@ node[:deploy].each do |application, deploy|
   masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
   Chef::Log.info("Master instance: #{masterinstance.inspect}")
 
-  #cron "Magento cron on master instance for #{application}" do
-  #  action masterinstance ? :create : :delete
-  #  minute '*'
-  #  user node[:apache][:user]
-  #  command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
-  #end
+  cron "Magento cron on master instance for #{application}" do
+    action masterinstance ? :create : :delete
+    minute '*'
+    user node[:apache][:user]
+    command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
+  end
 
 end
