@@ -59,11 +59,11 @@ node[:deploy].each do |application, deploy|
     only_if do deploy.key?(:environment_name) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
   end
 
-  Chef::Log.info("Release path: #{node[:opsworks][:layers].inspect}")
-  Chef::Log.info("Release path: #{node[:opsworks][:instance].inspect}")
+  Chef::Log.info("First server in layer IP: #{node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip].inspect}")
+  Chef::Log.info("This server's IP: #{node[:opsworks][:instance][:private_ip].inspect}")
 
-  #masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
-  #Chef::Log.info("Master instance: #{masterinstance.inspect}")
+  masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
+  Chef::Log.info("Master instance: #{masterinstance.inspect}")
 
   #cron "Magento cron on master instance for #{application}" do
   #  action masterinstance ? :create : :delete
