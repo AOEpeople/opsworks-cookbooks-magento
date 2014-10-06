@@ -59,6 +59,9 @@ node[:deploy].each do |application, deploy|
     only_if do deploy.key?(:environment_name) && File.exists?("#{deploy[:deploy_to]}/current/#{deploy[:document_root]}/index.php") end
   end
 
+  Chef::Log.info("Release path: #{node[:opsworks][:layers].inspect}")
+  Chef::Log.info("Release path: #{node[:opsworks][:instance].inspect}")
+
   #masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
   #Chef::Log.info("Master instance: #{masterinstance.inspect}")
 
