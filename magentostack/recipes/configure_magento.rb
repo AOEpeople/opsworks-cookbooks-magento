@@ -5,7 +5,7 @@ node[:deploy].each do |application, deploy|
   # Chef::Log.info("Variable 'application': #{application.inspect}")
   
   ruby_block "Create dynamic Magento configuration file for #{application}" do
-    only_if deploy.key?(:application)
+    only_if do deploy.key?(:application) end
     block do
       File.open("/tmp/settings_#{application}.csv", 'w') { |file|
         file.write("Handler,Param2,Param2,Param3,#{deploy[:environment_name]}\n")
