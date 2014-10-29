@@ -1,6 +1,9 @@
 
 node[:deploy].each do |application, deploy|
 
+  Chef::Log.info("Variable 'deploy': #{deploy.inspect}")
+  Chef::Log.info("Variable 'application': #{application.inspect}")
+  
   ruby_block "Create dynamic Magento configuration file for #{application}" do
     block do
       if deploy.key?(:environment_name) then
