@@ -63,21 +63,24 @@ node[:deploy].each do |application, deploy|
     only_if do deploy.key?(:application) && File.exists?("#{magento_basepath}index.php") end
   end
 
-
   Chef::Log.info("#{node[:opsworks][:layers]['php-app'].inspect}")
 
-  Chef::Log.info("First server in layer IP: #{node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip].inspect}")
-  Chef::Log.info("This server's IP: #{node[:opsworks][:instance][:private_ip].inspect}")
+  if node[:opsworks][:layers]['php-app'][:instances].count > 0
 
-  masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
-  Chef::Log.info("Master instance: #{masterinstance.inspect}")
-  Chef::Log.info("Magento base path: #{magento_basepath}")
+    Chef::Log.info("First server in layer IP: #{node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip].inspect}")
+    Chef::Log.info("This server's IP: #{node[:opsworks][:instance][:private_ip].inspect}")
 
-  cron "Magento cron on master instance for #{application}" do
-    action masterinstance ? :create : :delete
-    minute '*'
-    user node[:apache][:user]
-    command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
+    masterinstance = (node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip] == node[:opsworks][:instance][:private_ip])
+    Chef::Log.info("Master instance: #{masterinstance.inspect}")
+    Chef::Log.info("Magento base path: #{magento_basepath}")
+
+    cron "Magento cron on master instance for #{application}" do
+      action masterinstance ? :create : :delete
+      minute '*'
+      user node[:apache][:user]
+      command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
+    end
+
   end
 
 end
