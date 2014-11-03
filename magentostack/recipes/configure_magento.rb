@@ -63,6 +63,9 @@ node[:deploy].each do |application, deploy|
     only_if do deploy.key?(:application) && File.exists?("#{magento_basepath}index.php") end
   end
 
+
+  Chef::Log.info("#{node[:opsworks][:layers]['php-app'].inspect}")
+
   Chef::Log.info("First server in layer IP: #{node[:opsworks][:layers]['php-app'][:instances].sort.first[1][:private_ip].inspect}")
   Chef::Log.info("This server's IP: #{node[:opsworks][:instance][:private_ip].inspect}")
 
