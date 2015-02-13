@@ -21,7 +21,7 @@ node[:deploy].each do |application, deploy|
         print "\n\n" + deploy.inspect + "\n\n"
 
         # Assuming we have a single Redis server
-        if node[:opsworks][:layers][:redis][:instances].first
+        if node[:opsworks][:layers].key?(:redis) && node[:opsworks][:layers][:redis][:instances].first
           redis_ip = node[:opsworks][:layers][:redis][:instances].first[1][:private_ip].to_s
           if deploy.key?(:settings) && deploy[:settings].key?(:redis_cache_port)
             file.write("# Cache Backend,,,\n")
