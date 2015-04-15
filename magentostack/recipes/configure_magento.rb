@@ -10,7 +10,7 @@ node[:deploy].each do |application, deploy|
       File.open("/tmp/settings_#{application}.csv", 'w') { |file|
         file.write("Handler,Param2,Param2,Param3,#{deploy[:environment_name]}\n")
 
-        if deploy[:database]
+        if deploy[:database] && deploy[:database][:database]
           file.write("# Database,,,\n")
           file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/resources/default_setup/connection/dbname,,#{deploy[:database][:database]}\n")
           file.write("Est_Handler_XmlFile,app/etc/local.xml,/config/global/resources/default_setup/connection/host,,#{deploy[:database][:host]}\n")
