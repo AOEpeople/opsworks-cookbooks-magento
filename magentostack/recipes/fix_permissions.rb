@@ -11,26 +11,26 @@ node[:deploy].each do |application, deploy|
   
   execute "Change project file permissions for #{application}" do
     user "root"
-    command "find #{app_basepath} -type f -exec chmod 400 {} \;"
+    command "find #{app_basepath} -type f -exec chmod 400 {} \\;"
     action :run
   end
   
   execute "Change project directory permissions for #{application}" do
     user "root"
-    command "find #{app_basepath} -type d -exec chmod 500 {} \;"
+    command "find #{app_basepath} -type d -exec chmod 500 {} \\;"
     action :run
   end
 	
   %w(media var).each do |name|
     execute "Change project file permissions for #{app_basepath}/../shared/#{name}" do
       user "root"
-      command "find #{app_basepath}/../shared/#{name} -type f -exec chmod 600 {} \;"
+      command "find #{app_basepath}/../shared/#{name} -type f -exec chmod 600 {} \\;"
       action :run
     end
   
     execute "Change project directory permissions for #{app_basepath}/../shared/#{name}" do
       user "root"
-      command "find #{app_basepath}/../shared/#{name} -type d -exec chmod 700 {} \;"
+      command "find #{app_basepath}/../shared/#{name} -type d -exec chmod 700 {} \\;"
       action :run
     end
   end
