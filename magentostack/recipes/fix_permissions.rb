@@ -10,9 +10,9 @@ node[:deploy].each do |application, deploy|
     action :run
   end
   
-  execute "Making tools executable in #{app_basepath}#{tools}" do
+  execute "Making tools executable in #{app_basepath}tools" do
     user "root"
-    command "find -L #{app_basepath}#{tools} -type f -exec chmod 700 {} \\;"
+    command "find -L #{app_basepath}tools -type f -exec chmod 700 {} \\;"
     action :run
   end
   
