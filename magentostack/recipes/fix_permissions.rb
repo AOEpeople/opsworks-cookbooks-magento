@@ -10,6 +10,12 @@ node[:deploy].each do |application, deploy|
     action :run
   end
   
+  execute "Making tools executable in #{app_basepath}#{tools}" do
+    user "root"
+    command "find -L #{app_basepath}#{tools} -type f -exec chmod 700 {} \\;"
+    action :run
+  end
+  
   execute "Change project file permissions for #{application}" do
     user "root"
     command "find #{app_basepath} -type f -exec chmod 400 {} \\;"
@@ -39,5 +45,5 @@ node[:deploy].each do |application, deploy|
       action :run
     end
   end
-
+ 
 end
