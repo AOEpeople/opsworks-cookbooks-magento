@@ -56,9 +56,9 @@ node[:deploy].each do |application, deploy|
   magento_basepath="#{deploy[:deploy_to]}/current/htdocs/"
 
   execute "Apply dynamic Magento environment settings to #{application}" do
-    user "deploy"
+    user node[:apache][:user]
     cwd magento_basepath
-    command "../tools/apply.php '#{deploy[:environment_name]}' '/tmp/settings_#{application}.csv'"
+    command "/usr/bin/php ../tools/apply.php '#{deploy[:environment_name]}' '/tmp/settings_#{application}.csv'"
     action :run
     only_if do deploy.key?(:application) && File.exists?("#{magento_basepath}index.php") end
   end
