@@ -2,6 +2,7 @@
 node[:deploy].each do |application, deploy|
 
   app_basepath="#{deploy[:deploy_to]}/current/"
+  shared_basepath="/srv/www/#{application}/shared/"
 	
   execute "Change owner for #{application}" do
     user "root"
@@ -22,15 +23,15 @@ node[:deploy].each do |application, deploy|
   end
 	
   %w(media var).each do |name|
-    execute "Change project file permissions for #{app_basepath}/../shared/#{name}" do
+    execute "Change project file permissions for #{shared_basepath}#{name}" do
       user "root"
-      command "find #{app_basepath}/../shared/#{name} -type f -exec chmod 600 {} \\;"
+      command "find #{shared_basepath}#{name} -type f -exec chmod 600 {} \\;"
       action :run
     end
   
-    execute "Change project directory permissions for #{app_basepath}/../shared/#{name}" do
+    execute "Change project directory permissions for #{shared_basepath}#{name}" do
       user "root"
-      command "find #{app_basepath}/../shared/#{name} -type d -exec chmod 700 {} \\;"
+      command "find #{shared_basepath}#{name} -type d -exec chmod 700 {} \\;"
       action :run
     end
   end
