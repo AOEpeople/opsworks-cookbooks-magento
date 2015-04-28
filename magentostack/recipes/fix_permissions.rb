@@ -12,19 +12,19 @@ node[:deploy].each do |application, deploy|
   
   execute "Making tools executable in #{app_basepath}tools" do
     user "root"
-    command "find -L #{app_basepath}tools -type f -exec chmod 700 {} \\;"
+    command "find -L #{app_basepath}tools -type f -exec chmod 775 {} \\;"
     action :run
   end
   
   execute "Change project file permissions for #{application}" do
     user "root"
-    command "find #{app_basepath} -type f -exec chmod 400 {} \\;"
+    command "find #{app_basepath} -type f -exec chmod 664 {} \\;"
     action :run
   end
   
   execute "Change project directory permissions for #{application}" do
     user "root"
-    command "find #{app_basepath} -type d -exec chmod 500 {} \\;"
+    command "find #{app_basepath} -type d -exec chmod 775 {} \\;"
     action :run
   end
 	
@@ -36,12 +36,12 @@ node[:deploy].each do |application, deploy|
 	end
     execute "Change project file permissions for #{shared_basepath}#{name}" do
       user "root"
-      command "find #{shared_basepath}#{name} -type f -exec chmod 600 {} \\;"
+      command "find #{shared_basepath}#{name} -type f -exec chmod 664 {} \\;"
       action :run
     end
     execute "Change project directory permissions for #{shared_basepath}#{name}" do
       user "root"
-      command "find #{shared_basepath}#{name} -type d -exec chmod 700 {} \\;"
+      command "find #{shared_basepath}#{name} -type d -exec chmod 775 {} \\;"
       action :run
     end
   end
