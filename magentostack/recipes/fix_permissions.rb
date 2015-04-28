@@ -6,7 +6,7 @@ node[:deploy].each do |application, deploy|
 
   execute "Change owner for #{application}" do
     user "root"
-    command "chown -R #{node[:apache][:user]}:#{node[:apache][:user]} #{app_basepath}"
+    command "chown -R deploy:#{node[:apache][:user]} #{app_basepath}"
     action :run
   end
   
@@ -31,7 +31,7 @@ node[:deploy].each do |application, deploy|
   %w(media var).each do |name|
     execute "Change owner for #{shared_basepath}#{name}" do
       user "root"
-      command "chown -R #{node[:apache][:user]}:#{node[:apache][:user]} #{shared_basepath}#{name}"
+      command "chown -R deploy:#{node[:apache][:user]} #{shared_basepath}#{name}"
       action :run
     end
     execute "Change project file permissions for #{shared_basepath}#{name}" do
