@@ -17,12 +17,6 @@ group 'www-data' do
   append true
 end
 
-group 'www-data' do
-  action :modify
-  members 'deploy'
-  append true
-end
-
 execute "install mcrypt" do
   command "php5enmod mcrypt"
   user 'root'
