@@ -1,4 +1,4 @@
-Chef::Log.info("Recipe magentostack::elb")
+Chef::Log.info("Recipe magentostack::elb_register")
 
 # current instances
 currentIds = node[:opsworks][:layers]['php-app'][:instances].sort.collect{|i| i['aws_instance_id'] }
