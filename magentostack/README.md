@@ -1,10 +1,8 @@
-magentostack Cookbook
-=====================
+# Magentostack Cookbook
 
 This cookbook is intended to be used with AWS OpsWorks
 
-Configuration
--------------
+## Configuration
 
 - Configure custom repository URL: https://github.com/fbrnc/opsworks-cookbooks.git
 - Layers:
@@ -17,7 +15,20 @@ Configuration
     - magentostack::configure_magento
   - Deploy:
     - magentostack::configure_magento
+    
+## Additional ELBs    
 
-License and Authors
--------------------
-Authors: Fabrizio Branca
+```
+{
+  "additional-elbs": {
+    "elbs": [
+      "magento-production-opsworks2"
+    ],
+    "aws_secret_access_key": "...",
+    "aws_access_key_id": "..."
+  }
+}
+```
+
+## License and Authors
+Author: [Fabrizio Branca](https://twitter.com/fbrnc)
