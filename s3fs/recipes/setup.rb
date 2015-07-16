@@ -100,6 +100,7 @@ buckets.each do |bucket|
     message "Unmounting existing S3FS mount at /mnt/#{bucket[:name]}"
     action :nothing
   end
-    
-  execute "s3fs #{bucket[:name]} /mnt/#{bucket[:name]} -o allow_other -o use_cache=#{cache_dir}"
+
+  # TODO: make uid and gid configurable, or even better: make username and group name configurable and find out uid/gid using the "id" command
+  execute "s3fs #{bucket[:name]} /mnt/#{bucket[:name]} -o uid=33,gid=33,umask=0117,allow_other -o use_cache=#{cache_dir}"
 end
