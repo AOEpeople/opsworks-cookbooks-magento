@@ -91,16 +91,18 @@ buckets.each do |bucket|
     recursive true
   end
 
-  execute "umount /mnt/#{bucket[:name]}" do
-    only_if %Q(mount | grep "s3fs on /mnt/#{bucket[:name]}")
-    notifies :write, 'log[unmounting s3fs bucket]', :immediately
-  end
-  
-  log('unmounting s3fs bucket') do
-    message "Unmounting existing S3FS mount at /mnt/#{bucket[:name]}"
-    action :nothing
-  end
+#   execute "umount /mnt/#{bucket[:name]}" do
+#     only_if %Q(mount | grep "s3fs on /mnt/#{bucket[:name]}")
+#     notifies :write, 'log[unmounting s3fs bucket]', :immediately
+#   end
+#
+#   log('unmounting s3fs bucket') do
+#     message "Unmounting existing S3FS mount at /mnt/#{bucket[:name]}"
+#     action :nothing
+#   end
 
   # TODO: make uid and gid configurable, or even better: make username and group name configurable and find out uid/gid using the "id" command
-  execute "s3fs #{bucket[:name]} /mnt/#{bucket[:name]} -o uid=33,gid=33,umask=0117,allow_other -o use_cache=#{cache_dir}"
+  execute "s3fs #{bucket[:name]} /mnt/#{bucket[:name]} -o uid=33,gid=33,umask=0117,allow_other -o use_cache=#{cache_dir}" do
+    not_if %Q(mount | grep "s3fs on /mnt/#{bucket[:name]}")
+  end
 end
