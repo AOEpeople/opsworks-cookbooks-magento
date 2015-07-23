@@ -30,4 +30,11 @@ node[:deploy].each do |application, deploy|
   end
 end
 
+# Instead we're reloading Apache
+include_recipe "apache2::service"
 
+execute "reload apache" do
+  command "echo 'Reloading Apache now'"
+  action :run
+  notifies :reload, "service[apache2]", :delayed
+end
