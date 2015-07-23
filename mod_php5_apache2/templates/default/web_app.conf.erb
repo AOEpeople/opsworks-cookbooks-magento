@@ -50,9 +50,6 @@
   Include <%= @params[:local_config] %>*
   <% else -%>
   IncludeOptional <%= @params[:local_config] %>*
-  <% if Dir.exists?(File.dirname(@params[:docroot]) + "/apache_includes/") -%>
-  IncludeOptional <%= File.dirname(@params[:docroot]) %>/apache_includes/*
-  <% end -%>
   <% end -%>
 </VirtualHost>
 
@@ -118,9 +115,6 @@
   Include <%= @params[:local_config] %>-ssl*
   <% else -%>
   IncludeOptional <%= @params[:local_config] %>-ssl*
-  <% if Dir.exists?(File.dirname(@params[:docroot]) + "/apache_includes/") -%>
-  IncludeOptional <%= File.dirname(@params[:docroot]) %>/apache_includes/*
-  <% end -%>
   <% end -%>
 </VirtualHost>
 <% end -%>
