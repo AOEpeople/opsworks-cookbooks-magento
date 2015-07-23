@@ -6,8 +6,8 @@
   DocumentRoot <%= @params[:docroot] %>
 
   <Directory <%= @params[:docroot] %>>
-    Options <%= node[:apache][:options] ||= "FollowSymLinks" %>
-    AllowOverride <%= node[:apache][:allow_override] ||= "All" %>
+    Options <%= node[:apache][:options] || "FollowSymLinks" %>
+    AllowOverride <%= node[:apache][:allow_override] || "All" %>
     Order allow,deny
     Allow from all
   </Directory>
