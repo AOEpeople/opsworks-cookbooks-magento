@@ -10,6 +10,8 @@
     AllowOverride <%= node[:apache][:allow_override] || "All" %>
     Order allow,deny
     Allow from all
+
+    IncludeOptional <%= "#{node[:apache][:dir]}/sites-available/#{application_name}.conf.d/" %>docroot-*
   </Directory>
 
   <Directory ~ "\.svn">
