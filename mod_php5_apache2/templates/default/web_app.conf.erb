@@ -11,7 +11,7 @@
     Order allow,deny
     Allow from all
 
-    IncludeOptional <%= "#{node[:apache][:dir]}/sites-available/#{application_name}.conf.d/" %>docroot-*
+    IncludeOptional <%= File.dirname(@params[:local_config])" %>/docroot-*
   </Directory>
 
   <Directory ~ "\.svn">
