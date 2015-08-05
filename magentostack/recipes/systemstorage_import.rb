@@ -13,7 +13,7 @@ node[:deploy].each do |application, deploy|
     Chef::Log.info("Current environment: #{deploy[:environment_name]}")
 
     access_key = deploy[:systemstorage][:access_key]
-    secret_key = deploy[:systemstorage][:secrect_key]
+    secret_key = deploy[:systemstorage][:secret_key]
     region = deploy[:systemstorage][:region]
     s3_location = deploy[:systemstorage][:s3_location].sub(/(\/)+$/,'')
     profile_name = application
