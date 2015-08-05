@@ -15,13 +15,14 @@ node[:deploy].each do |application, deploy|
     access_key = deploy[:systemstorage][:access_key]
     secret_key = deploy[:systemstorage][:secrect_key]
     region = deploy[:systemstorage][:region]
-    s3_location = deploy[:systemstorage][:s3_location].sub(/(\/)+$/,'') 
+    s3_location = deploy[:systemstorage][:s3_location].sub(/(\/)+$/,'')
     profile_name = application
 
     if master_system != deploy[:environment_name]
 
       execute "Configure aws cli tool" do
         user "deploy"
+        environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
         command "aws configure set aws_access_key_id '#{access_key}' --profile '#{profile_name}'; aws configure set aws_secret_access_key '#{secret_key}' --profile '#{profile_name}'; aws configure set region '#{region}' --profile '#{profile_name}'"
         action :run
       end
@@ -38,12 +39,14 @@ node[:deploy].each do |application, deploy|
 
       execute "Download systemstorage for master instance '#{master_system}'" do
         user "deploy"
+        environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
         command "aws --profile '#{profile_name}' s3 cp --recursive #{remote_location} #{tmpdir}"
         action :run
       end
 
       execute "Import systemstorage" do
         user "deploy"
+        environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
         command "#{deploy[:deploy_to]}/current/tools/systemstorage_import.sh -p #{deploy[:deploy_to]}/current/htdocs -s #{tmpdir}"
         action :run
       end
