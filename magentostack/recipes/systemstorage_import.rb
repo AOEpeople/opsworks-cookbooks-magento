@@ -20,12 +20,14 @@ node[:deploy].each do |application, deploy|
 
     if master_system != deploy[:environment_name]
 
+=begin
       execute "Configure aws cli tool" do
         user "deploy"
         environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
         command "aws configure set aws_access_key_id '#{access_key}' --profile '#{profile_name}'; aws configure set aws_secret_access_key '#{secret_key}' --profile '#{profile_name}'; aws configure set region '#{region}' --profile '#{profile_name}'"
         action :run
       end
+=end
 
       tmpdir = Dir.mktmpdir("systemstorage-for-#{deploy[:environment_name]}")
       directory tmpdir do
@@ -39,8 +41,15 @@ node[:deploy].each do |application, deploy|
 
       execute "Download systemstorage for master instance '#{master_system}'" do
         user "deploy"
-        environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
-        command "aws --profile '#{profile_name}' s3 cp --recursive #{remote_location} #{tmpdir}"
+        environment ({
+          'HOME' => Dir.home('deploy'),
+          'USER' => 'deploy',
+          'AWS_ACCESS_KEY_ID' => access_key,
+          'AWS_SECRET_ACCESS_KEY' => secret_key,
+          'AWS_SECURITY_TOKEN' => ''
+        })
+        #command "aws --profile '#{profile_name}' s3 cp --recursive #{remote_location} #{tmpdir}"
+        command "aws s3 cp --recursive #{remote_location} #{tmpdir}"
         action :run
       end
 
