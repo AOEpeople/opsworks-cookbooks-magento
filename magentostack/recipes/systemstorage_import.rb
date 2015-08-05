@@ -1,3 +1,7 @@
+# This assumes the Magento install has already been configured with the correct database parameters
+# This is a chicken-and-egg problem and requires you to manually import the initial db dump
+# and also makes it different to boot up non-master systems fully automatically from scratch
+
 node[:deploy].each do |application, deploy|
 
   # Chef::Log.info("Variable 'deploy': #{deploy.inspect}")
@@ -8,10 +12,10 @@ node[:deploy].each do |application, deploy|
     Chef::Log.info("Detected master system: #{master_system}")
     Chef::Log.info("Current environment: #{deploy[:environment_name]}")
 
-    access_key = deploy[:systemstorage][:access_key] || raise ArgumentError, 'No access key found'
-    secret_key = deploy[:systemstorage][:secrect_key] || raise ArgumentError, 'No secret key found'
-    region = deploy[:systemstorage][:region] || raise ArgumentError, 'No region found'
-    s3_location = deploy[:systemstorage][:s3_location].sub(/(\/)+$/,'') || raise ArgumentError, 'No S3 location found'
+    access_key = deploy[:systemstorage][:access_key] || raise 'No access key found'
+    secret_key = deploy[:systemstorage][:secrect_key] || raise 'No secret key found'
+    region = deploy[:systemstorage][:region] || raise 'No region found'
+    s3_location = deploy[:systemstorage][:s3_location].sub(/(\/)+$/,'') || raise 'No S3 location found'
     profile_name = application
 
     if master_system != deploy[:environment_name]
