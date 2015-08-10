@@ -15,4 +15,5 @@
 #
 
 default['s3fs']['download'] = 'https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.78.tar.gz'
+default['s3fs']['cache_dir'] = '/media/ephemeral0/s3fs'
 
