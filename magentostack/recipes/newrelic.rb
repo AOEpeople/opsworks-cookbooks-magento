@@ -1,3 +1,5 @@
+include_recipe "apache2::service"
+
 include_recipe 'newrelic::default'
 include_recipe 'newrelic::php-agent'
 
