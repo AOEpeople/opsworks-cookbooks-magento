@@ -81,7 +81,7 @@ buckets.each do |bucket|
   directory "/mnt/#{bucket[:name]}"
 
   # Folders will be created in here for each of the buckets by s3fs
-  cache_dir = node[:s3fs][:download]
+  cache_dir = node[:s3fs][:cache_dir]
 
   # Give a reminder as filling up the root volume would be bad
   Chef::Log.info("Enabling S3FS caching on #{cache_dir}")
