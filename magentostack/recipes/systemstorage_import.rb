@@ -2,6 +2,8 @@
 # This is a chicken-and-egg problem and requires you to manually import the initial db dump
 # and also makes it different to boot up non-master systems fully automatically from scratch
 
+# TODO: it should be possible to provide the db credentials as parameters instead
+
 node[:deploy].each do |application, deploy|
 
   # Chef::Log.info("Variable 'deploy': #{deploy.inspect}")
@@ -56,7 +58,7 @@ node[:deploy].each do |application, deploy|
       execute "Import systemstorage" do
         user "deploy"
         environment ({'HOME' => Dir.home('deploy'), 'USER' => 'deploy' })
-        command "#{deploy[:deploy_to]}/current/tools/systemstorage_import.sh -p #{deploy[:deploy_to]}/current/htdocs -s #{tmpdir}"
+        command "#{deploy[:deploy_to]}/current/tools/systemstorage_import.sh -p #{deploy[:deploy_to]}/current/htdocs -s #{tmpdir} -f"
         action :run
       end
 
