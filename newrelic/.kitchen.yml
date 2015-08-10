@@ -1,0 +1,69 @@
+---
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+
+provisioner:
+  attributes:
+    newrelic:
+      license: '0000ffff0000ffff0000ffff0000ffff0000ffff'
+
+platforms:
+  - name: ubuntu-12.04
+    run_list:
+      - recipe[apt]
+    attributes:
+      rubygems: 'rubygems'
+      newrelic:
+        php_agent:
+          web_server:
+            service_name: apache2
+          php_config: '/etc/php5/conf.d/newrelic.ini'
+  - name: ubuntu-14.04
+    run_list:
+      - recipe[apt]
+    attributes:
+      rubygems: 'rubygems-integration'
+      newrelic:
+        php5enmode: = true
+        php_agent:
+          web_server:
+            service_name: apache2
+          php_config: '/etc/php5/mods-available/newrelic.ini'
+  - name: centos-6.6
+    attributes:
+      rubygems: 'rubygems'
+      newrelic:
+        php_agent:
+          web_server:
+            service_name: httpd
+          php_config: '/etc/php.d/newrelic.ini'
+
+suites:
+  - name: default
+    run_list:
+      - recipe[newrelic::default]
+    attributes:
+      newrelic:
+        server_monitor_agent:
+          service_notify_action: nothing
+          service_actions:
+            - nothing
+  - name: php-agent
+    run_list: "recipe[newrelic_lwrp_test::agent_php]"
+  - name: server-monitor
+    run_list: "recipe[newrelic_lwrp_test::server_monitor]"
+  - name: java-agent
+    run_list: "recipe[newrelic_lwrp_test::agent_java]"
+  - name: ruby-agent
+    run_list: "recipe[newrelic_lwrp_test::agent_ruby]"
+    attributes: 
+      newrelic: 
+        ruby_agent:
+          install_dir: '/opt/newrelic/ruby'
+  - name: python-agent-recipe
+    run_list: "recipe[newrelic_lwrp_test::agent_python_recipe]"
+  - name: nodejs-agent
+    run_list: "recipe[newrelic_lwrp_test::agent_nodejs]"
+  - name: nodejs-agent-recipe
+    run_list: "recipe[newrelic_lwrp_test::agent_nodejs_recipe]"
