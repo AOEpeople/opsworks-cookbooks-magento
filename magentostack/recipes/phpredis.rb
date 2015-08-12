@@ -1,3 +1,5 @@
+include_recipe "apache2::service"
+
 package 'php5-dev' do
   action :upgrade
 end
@@ -35,8 +37,14 @@ bash "install igbinary and phpredis" do
 end
 
 %w(apache2 cli).each do |name|
-  file "/etc/php5/#{name}/conf.d/30-phpredis" do
+  file "/etc/php5/#{name}/conf.d/30-phpredis.ini" do
     action :create
-    content "extension=igbinary.so\nextension=redis.so"
+    content "extension=igbinary.so\nextension=redis.so\n"
   end
+end
+
+execute "restart apache" do
+  command "echo 'Restarting Apache now'"
+  action :run
+  notifies :restart, "service[apache2]"
 end
