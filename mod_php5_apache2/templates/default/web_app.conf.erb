@@ -24,10 +24,12 @@
     Deny from all
   </Directory>
 
+  LogFormat "\"%{X-Forwarded-For}i\" %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined-elb
+
   LogLevel <%= node[:apache][:log_level] %>
   ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
-  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined
-  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ganglia.log ganglia
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-access.log combined-elb
+  # CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ganglia.log ganglia
 
   FileETag none
 
@@ -89,10 +91,12 @@
     Deny from all
   </Directory>
 
+  LogFormat "\"%{X-Forwarded-For}i\" %l %u %t \"%r\" %>s %b \"%{Referer}i\" \"%{User-agent}i\"" combined-elb
+
   LogLevel <%= node[:apache][:log_level] %>
   ErrorLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-error.log
-  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ssl-access.log combined
-  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ssl-ganglia.log ganglia
+  CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ssl-access.log combined-elb
+  # CustomLog <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-ssl-ganglia.log ganglia
 
   FileETag none
 
