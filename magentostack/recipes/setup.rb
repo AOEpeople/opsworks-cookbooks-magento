@@ -35,13 +35,6 @@ node[:deploy].each do |application, deploy|
         variables( :log_dirs => ["#{deploy[:deploy_to]}/shared/var/log" ] )
     end
 
-    if !node.default.key?('cwlogs')
-        node.default['cwlogs'] = []
-    end
-    if !node.default['cwlogs'].key?('logfiles')
-        node.default['cwlogs']['logfiles'] = []
-    end
-
     node.default['cwlogs']['logfiles']["magento_system_log_#{application}"] = {
         :log_stream_name => "magento_system_log_#{application}",
         :log_group_name => "#{application}",
