@@ -55,6 +55,9 @@
   <% else -%>
   IncludeOptional <%= @params[:local_config] %>*
   <% end -%>
+
+  php_value error_log <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-php-error.log
+
 </VirtualHost>
 
 <% if node[:deploy][@application_name][:ssl_support] -%>
@@ -122,5 +125,8 @@
   <% else -%>
   IncludeOptional <%= @params[:local_config] %>-ssl*
   <% end -%>
+
+  php_value error_log <%= node[:apache][:log_dir] %>/<%= @params[:name] %>-php-error.log
+
 </VirtualHost>
 <% end -%>

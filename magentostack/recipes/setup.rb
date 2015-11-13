@@ -59,4 +59,12 @@ node[:deploy].each do |application, deploy|
         :initial_position => 'end_of_file'
     }
 
+    node.default['cwlogs']['logfiles']["php_error_log_#{application}"] = {
+        :log_stream_name => "php_error_log_#{application}",
+        :log_group_name => "#{application}",
+        :file => "/var/log/apache2/#{application}-php-error.log",
+        :datetime_format => '%d-%b-%Y %H:%M:%S',
+        :initial_position => 'end_of_file'
+    }
+
 end
