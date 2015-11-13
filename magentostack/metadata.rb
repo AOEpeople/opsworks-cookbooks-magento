@@ -1,5 +1,5 @@
 name             'magentostack'
-maintainer       'YOUR_COMPANY_NAME'
+maintainer       'Fabrizio Branca'
 maintainer_email 'YOUR_EMAIL'
 license          'All rights reserved'
 description      'Installs/Configures magentostack'
@@ -8,5 +8,6 @@ version          '0.1.0'
 
 depends "cron"
 depends "newrelic"
+depends "cwlogs"
 
 supports "ubuntu"

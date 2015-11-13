@@ -22,3 +22,15 @@ execute "install mcrypt" do
   user 'root'
   notifies :restart, "service[apache2]", :delayed
 end
+
+node[:deploy].each do |application, deploy|
+  template "/etc/logrotate.d/magentologs_#{application}" do
+    backup false
+    source "logrotate.erb"
+    cookbook 'magentostack'
+    owner "root"
+    group "root"
+    mode 0644
+    variables( :log_dirs => ["#{deploy[:deploy_to]}/shared/var/log" ] )
+  end
+end
