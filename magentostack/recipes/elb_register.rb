@@ -13,7 +13,6 @@ if node.key?('additional-elbs') && node['additional-elbs'].key?('elbs')
         'AWS_ACCESS_KEY_ID' => node['additional-elbs']['aws_access_key_id'],
         'AWS_SECRET_ACCESS_KEY' => node['additional-elbs']['aws_secret_access_key']
       )
-      user "deploy"
     end
   end
 end

@@ -1,0 +1,70 @@
+---
+driver_plugin: vagrant
+driver_config:
+  require_chef_omnibus: true
+
+platforms:
+  - name: ubuntu-12.04
+    driver_config:
+        box: opscode-ubuntu-12.04
+        box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+#  - name: ubuntu-13.04
+#    driver_config:
+#      box: opscode-ubuntu-13.04
+#      box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_ubuntu-13.04_provisionerless.box
+#  - name: centos-6.3
+#    driver_config:
+#        box: opscode-centos-6.3
+#        box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.3_provisionerless.box
+  - name: centos-6.4
+    driver_config:
+        box: opscode-centos-6.4
+        box_url: https://opscode-vm-bento.s3.amazonaws.com/vagrant/opscode_centos-6.4_provisionerless.box
+
+suites:
+  - name: default
+    run_list:
+      - recipe[newrelic::default]
+    attributes:
+      newrelic:
+        server-monitor-agent:
+          service_notify_action: nothing
+          service_actions:
+            - nothing
+#        server-monitor-agent:
+#          service_notify_action: nothing
+#          service_actions:
+#            - nothing
+#  - name: dotnet-agent
+#    run_list:
+#      - recipe[newrelic::dotnet-agent]
+#  - name: java-agent
+#    run_list:
+#      - recipe[newrelic::java-agent]
+#  - name: meetme-plugin
+#    run_list:
+#      - recipe[newrelic::meetme-plugin]
+#  - name: nodejs-agent
+#    run_list:
+#      - recipe[newrelic::nodejs-agent]
+#  - name: php-agent
+#    run_list:
+#      - recipe[newrelic::php-agent]
+#  - name: python-agent
+#    run_list:
+#      - recipe[newrelic::python-agent]
+#  - name: repository
+#    run_list:
+#      - recipe[newrelic::repository]
+#  - name: ruby-agent
+#    run_list:
+#      - recipe[newrelic::ruby-agent]
+#  - name: server-monitor-agent
+#    run_list:
+#      - recipe[newrelic::server-monitor-agent]
+#    attributes:
+#      newrelic:
+#        server-monitor-agent:
+#          service_notify_action: nothing
+#          service_actions:
+#            - nothing

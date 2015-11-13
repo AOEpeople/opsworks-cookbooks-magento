@@ -74,11 +74,25 @@ node[:deploy].each do |application, deploy|
     Chef::Log.info("Master instance: #{masterinstance.inspect}")
     Chef::Log.info("Magento base path: #{magento_basepath}")
 
-    cron "Magento cron on master instance for #{application}" do
+    cron "Magento cron on master instance for #{application} - default" do
       action masterinstance ? :create : :delete
       minute '*'
       user node[:apache][:user]
-      command "! test -e #{magento_basepath}maintenance.flag && test -e #{magento_basepath}cron.sh && bash #{magento_basepath}cron.sh"
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode default"
+    end
+
+    cron "Magento cron on master instance for #{application} - always" do
+      action masterinstance ? :create : :delete
+      minute '*'
+      user node[:apache][:user]
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode always"
+    end
+
+    cron "Magento cron on master instance for #{application} - watchdog" do
+      action masterinstance ? :create : :delete
+      minute '*/10'
+      user node[:apache][:user]
+      command "! test -e #{magento_basepath}maintenance.flag && cd #{magento_basepath}shell && /usr/bin/php scheduler.php --action watchdog"
     end
 
   end
