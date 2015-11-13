@@ -8,6 +8,5 @@ version          '0.1.0'
 
 depends "cron"
 depends "newrelic"
-depends "cwlogs"
 
 supports "ubuntu"
