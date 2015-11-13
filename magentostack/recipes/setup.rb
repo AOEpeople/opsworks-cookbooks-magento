@@ -35,14 +35,14 @@ node[:deploy].each do |application, deploy|
         variables( :log_dirs => ["#{deploy[:deploy_to]}/shared/var/log" ] )
     end
 
-    if !node.key?('cwlogs')
-        node['cwlogs'] = []
+    if !node.default.key?('cwlogs')
+        node.default['cwlogs'] = []
     end
-    if !node['cwlogs'].key?('logfiles')
-        node['cwlogs']['logfiles'] = []
+    if !node.default['cwlogs'].key?('logfiles')
+        node.default['cwlogs']['logfiles'] = []
     end
 
-    node['cwlogs']['logfiles']["magento_system_log_#{application}"] = {
+    node.default['cwlogs']['logfiles']["magento_system_log_#{application}"] = {
         :log_stream_name => "magento_system_log_#{application}",
         :log_group_name => "#{application}",
         :file => "#{deploy[:deploy_to]}/shared/var/log/system.log",
@@ -50,7 +50,7 @@ node[:deploy].each do |application, deploy|
         :initial_position => 'end_of_file'
     }
 
-    node['cwlogs']['logfiles']["apache_access_log_#{application}"] = {
+    node.default['cwlogs']['logfiles']["apache_access_log_#{application}"] = {
         :log_stream_name => "apache_access_log_#{application}",
         :log_group_name => "#{application}",
         :file => "/var/log/apache2/#{application}-access.log",
@@ -58,7 +58,7 @@ node[:deploy].each do |application, deploy|
         :initial_position => 'end_of_file'
     }
 
-    node['cwlogs']['logfiles']["apache_error_log_#{application}"] = {
+    node.default['cwlogs']['logfiles']["apache_error_log_#{application}"] = {
         :log_stream_name => "apache_error_log_#{application}",
         :log_group_name => "#{application}",
         :file => "/var/log/apache2/#{application}-error.log",
