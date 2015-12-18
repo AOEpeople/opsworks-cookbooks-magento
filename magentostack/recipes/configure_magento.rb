@@ -74,14 +74,14 @@ node[:deploy].each do |application, deploy|
     Chef::Log.info("Master instance: #{masterinstance.inspect}")
     Chef::Log.info("Magento base path: #{magento_basepath}")
 
-    cron "Delete old default" do
+    cron "Magento cron on master instance for pys_magento_staging - default" do
       action :delete
       minute '*'
       user node[:apache][:user]
       command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode default"
     end
 
-    cron "Delete old always" do
+    cron "Magento cron on master instance for pys_magento_staging - always" do
       action :delete
       minute '*'
       user node[:apache][:user]
