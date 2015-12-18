@@ -74,18 +74,32 @@ node[:deploy].each do |application, deploy|
     Chef::Log.info("Master instance: #{masterinstance.inspect}")
     Chef::Log.info("Magento base path: #{magento_basepath}")
 
-    cron "Magento cron on master instance for #{application} - default" do
+    cron "Magento cron on master instance for #{application} - default (except 'long')" do
       action masterinstance ? :create : :delete
       minute '*'
       user node[:apache][:user]
-      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode default"
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode default --excludeGroups long"
     end
 
-    cron "Magento cron on master instance for #{application} - always" do
+    cron "Magento cron on master instance for #{application} - default (only 'long')" do
       action masterinstance ? :create : :delete
       minute '*'
       user node[:apache][:user]
-      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode always"
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode default --includeGroups long"
+    end
+
+    cron "Magento cron on master instance for #{application} - always (except 'long') " do
+      action masterinstance ? :create : :delete
+      minute '*'
+      user node[:apache][:user]
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode always --excludeGroups long"
+    end
+
+    cron "Magento cron on master instance for #{application} - always (only 'long')" do
+      action masterinstance ? :create : :delete
+      minute '*'
+      user node[:apache][:user]
+      command "! test -e #{magento_basepath}maintenance.flag && /bin/bash #{magento_basepath}scheduler_cron.sh --mode always --includeGroups long"
     end
 
     cron "Magento cron on master instance for #{application} - watchdog" do
